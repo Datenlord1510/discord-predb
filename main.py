@@ -122,10 +122,10 @@ if __name__ == "__main__":
                             except KeyError:
                                 pass
 
-                    if windows_hook.webhook_url and cat == "WINDOWS":
+                    if windows_url and cat == "WINDOWS":
                         embed.set_color(windows_hook_color)
                         windows_hook.send_embed(embed)
-                    elif nsw_hook.webhook_url and cat == "NSW":
+                    elif nsw_url and cat == "NSW":
                         embed.set_color(nsw_hook_color)
                         nsw_hook.send_embed(embed)
                     logger.info(f"Sent message for new release: {rls_title}")

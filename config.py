@@ -7,7 +7,7 @@ class Config:
         self.config = configparser.ConfigParser()
         self.config.read(config_file)
 
-    def get_relevant_categories(self) -> list[str]:
+    def get_relevant_categories(self) -> list:
         relevant_categories_str = self.config.get("categories",
                                                   "relevant_categories",
                                                   fallback="")

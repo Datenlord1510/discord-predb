@@ -1,7 +1,7 @@
 import requests
-import logging
+from logger import setup_logger
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class Webhook:

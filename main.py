@@ -1,4 +1,3 @@
-import logging
 import sys
 import os
 import time
@@ -6,15 +5,9 @@ from PYxREL import xREL
 from webhooks import Webhook, WebhookEmbed
 from config import Config
 from utils import write_games_file, read_games_file, timestamp_to_string
+from logger import setup_logger
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('LOGS.log')
-file_handler.setLevel(logging.INFO)
-logger.addHandler(file_handler)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - "
-                              "%(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-file_handler.setFormatter(formatter)
+logger = setup_logger(__name__)
 
 
 if __name__ == "__main__":
@@ -119,8 +112,11 @@ if __name__ == "__main__":
                     if windows_url and cat == "WINDOWS":
                         embed.set_color(windows_hook_color)
                         windows_hook.send_embed(embed)
+                        logger.info("Sent message for new release: "
+                                    f"{rls_title}")
                     elif nsw_url and cat == "NSW":
                         embed.set_color(nsw_hook_color)
                         nsw_hook.send_embed(embed)
-                    logger.info(f"Sent message for new release: {rls_title}")
+                        logger.info("Sent message for new release: "
+                                    f"{rls_title}")
         time.sleep(interval)

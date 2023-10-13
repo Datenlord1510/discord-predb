@@ -24,6 +24,12 @@ python3 main.py
 In case you are **not** interested in releases for the Windows or Nintendo Switch platform, simply remove the platform from "relevant_categories" in the config.ini file.
 If you messed up the configuration file, simply run "create_default_config.py" to create a new one!
 
+## Example
+This is what a message would look like by default:
+<p align="center">
+  <img src="https://i.ibb.co/xM9tZNn/eg.png"/>
+</p>
+
 ## Documentation
 [Discord API Reference](https://discordpy.readthedocs.io/en/stable/api.html)\
 [xREL API](https://www.xrel.to/wiki/1681/API.html)

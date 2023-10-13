@@ -10,7 +10,7 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 - Toggle between EU and US time formats!
 - Adjust the interval for new release checks!
 - No fancy dependencies, built using only the standard library!
-- Stay up-to-date with your favorite games!
+- Stay up-to-date with the newest games!
 
 ## Usage
 - Add your discord webhooks to the the config.ini file

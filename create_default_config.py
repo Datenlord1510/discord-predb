@@ -1,4 +1,7 @@
-[categories]
+import os
+
+
+config_content = """[categories]
 # Values must match xREL categories.
 relevant_categories = WINDOWS, NSW
 
@@ -22,12 +25,13 @@ timeformat = EU
 interval = 1200
 
 [modes]
-<<<<<<< HEAD
 # Set description to "True" in order to add a section with a game description in German.
 # Use "False" to turn the description off.
 description = False
-=======
-# Set description to "on" in order to add a section with a game description in German.
-# Use "off" to turn the description off.
-description = off
->>>>>>> 861724ef641c34ed5afecc039259a44da1a52f38
+"""
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(current_dir, 'config.ini')
+
+with open(config_path, 'w') as config_file:
+    config_file.write(config_content)

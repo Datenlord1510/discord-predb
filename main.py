@@ -1,10 +1,10 @@
 import logging
 import sys
 import os
-import configparser
 import time
 from PYxREL import xREL
 from webhooks import Webhook, WebhookEmbed
+from config import Config
 from utils import write_games_file, read_games_file, timestamp_to_string
 
 logger = logging.getLogger(__name__)
@@ -22,30 +22,24 @@ if __name__ == "__main__":
     if not os.path.exists("config.ini"):
         sys.exit("Could not find config.ini")
 
-    config = configparser.ConfigParser()
-    config.read("config.ini")
+    config = Config()
+    integrity = config.integrity_check()
 
-    interval = int(config.get("interval", "interval"))
-    timeformat = config.get("timeformat", "timeformat")
-    description_mode = config.get("modes", "description").lower()
+    interval = config.get_interval()
+    timeformat = config.get_time_format()
+    description_mode = config.get_description_mode()
 
-    windows_url = config.get("webhooks", "WINDOWS").strip()
-    nsw_url = config.get("webhooks", "NSW").strip()
-    if not windows_url and not nsw_url:
-        logger.warning("You did not configure any webhooks in the config.ini!")
-        sys.exit("Please configure either the 'WINDOWS' or the 'NSW' webhook "
-                 "URL in the 'webhooks' section of the 'config.ini' file.")
+    windows_url = config.get_webhook_for_category("WINDOWS")
+    nsw_url = config.get_webhook_for_category("NSW")
 
     if windows_url:
         windows_hook = Webhook(windows_url)
-        windows_hook_color = config.get("colors", "WINDOWS")
+        windows_hook_color = config.get_color_for_category("WINDOWS")
     if nsw_url:
         nsw_hook = Webhook(nsw_url)
-        nsw_hook_color = config.get("colors", "NSW")
+        nsw_hook_color = config.get_color_for_category("NSW")
 
-    relevant_categories_str = config.get("categories", "relevant_categories")
-    relevant_categories = [category.strip() for category in
-                           relevant_categories_str.split(",")]
+    relevant_categories = config.get_relevant_categories()
 
     indie_game_names = ["Indie-Spiele", "Wimmelbild-Spiele"]
     xrel = xREL()
@@ -115,7 +109,7 @@ if __name__ == "__main__":
                         except KeyError:
                             pass
 
-                        if description_mode == "on":
+                        if description_mode is True:
                             try:
                                 plot = ext_response["externals"][0]["plot"]
                                 embed.add_field("Description", plot)

@@ -27,7 +27,7 @@ If you messed up the configuration file, simply run "create_default_config.py" t
 ## Example
 This is what a message would look like by default:
 <p align="center">
-  <img src="https://i.ibb.co/xM9tZNn/eg.png"/>
+  <img src="https://i.ibb.co/w66GgqG/eg.png"/>
 </p>
 
 ## Documentation

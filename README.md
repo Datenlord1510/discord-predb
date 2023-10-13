@@ -9,7 +9,7 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 - Customize the color for your embedded messages!
 - Toggle between EU and US time formats!
 - Adjust the interval for new release checks!
-- No fancy dependencies, built using only the standard library!
+- No fancy dependencies, only one external dependency!
 - Stay up-to-date with the newest games!
 
 ## Usage

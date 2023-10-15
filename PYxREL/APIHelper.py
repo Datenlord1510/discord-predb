@@ -18,7 +18,6 @@ class APIHelper:
 
             try:
                 if response_format == "json":
-                    print(response.text)
                     return response.json()
                 elif response_format == "xml":
                     return response.content

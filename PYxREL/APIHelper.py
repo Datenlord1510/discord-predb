@@ -15,11 +15,16 @@ class APIHelper:
                 response = requests.post(api_url, params=parameters)
             else:
                 raise ValueError("Invalid value for the post flag.")
-                return
-            if response_format == 'json':
-                return response.json()
-            elif response_format == 'xml':
-                return response.content
-        except Exception as val_error:
-            print('Request failed:', val_error)
-            return
+
+            try:
+                if response_format == "json":
+                    return response.json()
+                elif response_format == "xml":
+                    return response.content
+            except Exception as val_error:
+                print("Invalid response format: ", val_error)
+                return None
+
+        except requests.RequestException as req_error:
+            print("Request failed: ", req_error)
+            return None

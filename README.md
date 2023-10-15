@@ -13,13 +13,12 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 - Stay up-to-date with the newest games!
 
 ## Usage
+- Install the requests module using pip or pip3.
 - Add your discord webhooks to the the config.ini file
 - Edit colors, time format and interval if needed.
 - Set the description mode to "True" if you want a short description of the game added to the message (the language will be **German**)
 - Run main.py
-```
-python3 main.py
-```
+
 
 In case you are **not** interested in releases for the Windows or Nintendo Switch platform, simply remove the platform from "relevant_categories" in the config.ini file.
 If you messed up the configuration file, simply run "create_default_config.py" to create a new one!

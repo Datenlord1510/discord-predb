@@ -14,9 +14,10 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 
 ## Usage
 - Install the requests module using pip or pip3
-- Add your discord webhooks to the the config.ini file
+- Add your Discord webhooks to the the config.ini file
 - Edit colors, time format and interval if needed
 - Set the description mode to "True" if you want a short description of the game added to the message (the language will be **German**)
+- Run test.py to check if everything is working. You should get a message to your configured webhooks.
 - Run main.py
 
 

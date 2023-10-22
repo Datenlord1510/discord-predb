@@ -34,7 +34,8 @@ if __name__ == "__main__":
 
     relevant_categories = config.get_relevant_categories()
 
-    indie_game_names = ["Indie-Spiele", "Wimmelbild-Spiele", "Solitär-Spiele"]
+    indie_game_names = ["Indie-Spiele", "Wimmelbild-Spiele", "Solitär-Spiele",
+                        "Puzzlespiele"]
     xrel = xREL()
     logger.info("Started Discord PreDB.")
 

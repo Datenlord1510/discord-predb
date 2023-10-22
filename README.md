@@ -9,11 +9,11 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 - Customize the color for your embedded messages!
 - Toggle between EU and US time formats!
 - Adjust the interval for new release checks!
-- No fancy dependencies, only one external dependency!
+- No fancy dependencies, only one external module!
 - Stay up-to-date with the newest games!
 
 ## Usage
-- Install the requests module using pip or pip3
+- If needed, install the requests module using pip or pip3
 - Add your Discord webhooks to the the config.ini file
 - Edit colors, time format and interval if needed
 - Set the description mode to "True" if you want a short description of the game added to the message (the language will be **German**)
@@ -25,7 +25,7 @@ In case you are **not** interested in releases for the Windows or Nintendo Switc
 If you messed up the configuration file, simply run "create_default_config.py" to create a new one!
 
 ## Example
-This is what a message would look like by default:
+This is what a message looks like by default:
 <p align="center">
   <img src="https://i.ibb.co/w66GgqG/eg.png"/>
 </p>

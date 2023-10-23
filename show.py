@@ -1,7 +1,7 @@
-from movie import Movie
+from watchablemedia import WatchableMedia
 
 
-class Show(Movie):
+class Show(WatchableMedia):
     def __init__(self):
         super().__init__()
         self.tv_season = None

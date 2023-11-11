@@ -14,7 +14,7 @@ discord-predb now supports more release types!
 - Anime (*new*)
 
 ## Features
-- Customize the color for your embedded messages!
+- Customize the colors for your embedded messages!
 - Toggle between EU and US time formats!
 - Adjust the interval for new release checks!
 - No fancy dependencies, only one external module!
@@ -36,6 +36,11 @@ This is what a message looks like by default:
 <p align="center">
   <img src="https://i.ibb.co/w66GgqG/eg.png"/>
 </p>
+
+## Disclaimer
+This repo **does not** provide or link to pirated content. It only **informs** about such releases.
+Some people asked if you risk your Discord server and acccount by running this repo.
+Please read Discord's [Community Guidlines](https://discord.com/terms/guidelines-march-2022) and [Terms of Service](https://discord.com/terms) and decide for yourself.
 
 ## Documentation
 [Discord API Reference](https://discordpy.readthedocs.io/en/stable/api.html)\

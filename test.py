@@ -1,108 +1,80 @@
-from PYxREL import xREL
-from webhooks import Webhook, WebhookEmbed
-from config import Config
 import sys
+import os
+import time
+from PYxREL import xREL
+from discord_webhooks import Webhook
+from config import Config
 from utils import timestamp_to_string
 from logger import setup_logger
+from game import Game
+from movies import Movies
+from show import Show
 
 logger = setup_logger(__name__, "test.log")
 
 
 if __name__ == "__main__":
 
+    if not os.path.exists("config.ini"):
+        sys.exit("Could not find config.ini. You can run the "
+                 "create_default_config.py and configure it.")
+
     config = Config()
     config.integrity_check()
     logger.info("Integrity check successful. Config file should be "
                 "configured correctly.")
 
-    relevant_categories = config.get_relevant_categories()
-
     interval = config.get_interval()
     timeformat = config.get_time_format()
-    description_mode = config.get_description_mode()
+    description_modes = config.get_description_modes()
 
-    windows_url = config.get_webhook_for_category("WINDOWS")
-    nsw_url = config.get_webhook_for_category("NSW")
+    webhooks = {}
+    for category, url in config.get_webhooks():
+        webhooks[category] = Webhook(url)
 
-    if windows_url:
-        windows_hook = Webhook(windows_url)
-        windows_hook_color = config.get_color_for_category("WINDOWS")
-        logger.info("Found webhook for Windows.")
-    if nsw_url:
-        nsw_hook = Webhook(nsw_url)
-        nsw_hook_color = config.get_color_for_category("NSW")
-        logger.info("Found webhook for Nintendo Switch.")
-
-    indie_game_names = ["Indie-Spiele", "Wimmelbild-Spiele"]
     xrel = xREL()
+    logger.info("Started test run.")
 
-    for category in relevant_categories:
-        response = xrel.Release.browse_category(category)
-        if response is None:
-            logger.warning("Could not get a response from xREL.")
-            sys.exit("Could not get a response from xREL. Please check "
-                     "your internet connection or xREL's status.")
+    for category in webhooks:
+        response = None
+        while not response:
+            response = xrel.Release.browse_category(category)
+            if not response:
+                logger.warning("Did not receive a response from xREL.")
+                time.sleep(interval)
 
-        example = response.get("list")[0]
-        indie_flag = False
-        embed = WebhookEmbed()
-        rls_title = example["dirname"]
-        embed.set_title(rls_title)
-        rls_time = timestamp_to_string(example["time"], timeformat)
-        embed.set_footer(f"Released on {rls_time}")
-        game_title = example["ext_info"]["title"]
+        response = response.get("list")
+        test_rls = response[0]
 
-        if game_title in indie_game_names:
-            indie_flag = True
-            if "-" in rls_title:
-                split_index = rls_title.find("-")
-                game_title = rls_title[:split_index].replace(
-                    ".", " ").replace("_", " ")
+        if category == "windows" or category == "nsw":
+            instance = Game.from_json(test_rls)
+        elif category == "movies":
+            instance = Movies.from_json(test_rls)
+        elif category == "tv" or category == "anime":
+            instance = Show.from_json(test_rls)
+        else:
+            logger.info(f"Found unknown category: {category}")
+            continue
 
-        embed.add_field("Game title", game_title)
-        embed.add_field("Group", example["group_name"])
-        embed.add_field("xREL", example["link_href"])
+        formatted_time = timestamp_to_string(instance.time_unix,
+                                             time_format=timeformat)
+        embed_msg = instance.to_embed()
+        embed_msg.set_color(config.get_color_for_category(category))
+        embed_msg.set_footer(formatted_time)
 
         try:
-            size = example["size"]["number"]
-            unit = example["size"]["unit"]
-            size_string = f"{size} {unit}"
-            embed.add_field("Size", f"{size_string}")
+            ext_response = xrel.ExtInfo.get_info(instance.ext_info_id)
+            embed_msg.set_thumbnail(ext_response["cover_url"])
         except KeyError:
             pass
 
-        try:
-            embed.add_field("Rating", str(example["ext_info"]
-                                          ["rating"]) + "/10")
-        except KeyError:
-            pass
-
-        if indie_flag is False:
-            ext_info_id = example["ext_info"]["id"]
-            ext_response = xrel.ExtInfo.get_info(ext_info_id)
-
+        if description_modes[category] is True:
             try:
-                embed.set_thumbnail(ext_response["cover_url"])
+                plot = ext_response["externals"][0]["plot"]
+                embed_msg.add_field("Description", plot)
             except KeyError:
                 pass
 
-            if description_mode is True:
-                try:
-                    plot = ext_response["externals"][0]["plot"]
-                    embed.add_field("Description", plot)
-                except KeyError:
-                    pass
-
-        if windows_url and category == "WINDOWS":
-            embed.set_color(windows_hook_color)
-            windows_hook.send_embed(embed)
-            logger.info("Sent test message for new release: "
-                        f"{rls_title}")
-        elif nsw_url and category == "NSW":
-            embed.set_color(nsw_hook_color)
-            nsw_hook.send_embed(embed)
-            logger.info("Sent test message for new release: "
-                        f"{rls_title}")
-
+        webhooks[category].send_embed(embed_msg)
         logger.info("Test passed. You should have received a message on your "
                     "configured webhooks.")

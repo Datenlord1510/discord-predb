@@ -22,3 +22,8 @@ class Game(xRELMedia):
             instance.game_title = instance.ext_info_title
 
         return instance
+
+    def to_embed(self):
+        embed = super().to_embed()
+        embed.add_field("Title", self.game_title)
+        return embed

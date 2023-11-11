@@ -11,17 +11,17 @@ def timestamp_to_string(timestamp: int, time_format="EU") -> str:
     return formatted_date
 
 
-def read_games_file(game_type: str) -> dict:
+def read_cache_file(category: str) -> dict:
     try:
-        with open(f"{game_type}.json", "r") as file:
-            games_list = json.load(file)
+        with open(f"{category}.json", "r") as file:
+            cache = json.load(file)
     except FileNotFoundError:
-        with open(f"{game_type}.json", "w") as file:
+        with open(f"{category}.json", "w") as file:
             pass
-        games_list = {}
-    return games_list
+        cache = {}
+    return cache
 
 
-def write_games_file(game_type: str, json_data: dict) -> None:
-    with open(f"{game_type}.json", "w") as file:
+def write_cache_file(category: str, json_data: dict) -> None:
+    with open(f"{category}.json", "w") as file:
         json.dump(json_data, file, indent=4)

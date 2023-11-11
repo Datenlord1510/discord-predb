@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class P2P(APIHelper):
 
     def __init__(self):
-        self.p2p_api = "https://api.xrel.to/v2/p2p/"
+        super().__init__()
+        self.p2p_api = f"{self.base_api}p2p/"
 
     def get_releases(self, per_page=25, page=1, category_id=None,
                      group_id=None, ext_info_id=None, response_format="json"):

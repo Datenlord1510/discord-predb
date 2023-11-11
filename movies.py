@@ -1,7 +1,7 @@
 from watchablemedia import WatchableMedia
 
 
-class Movie(WatchableMedia):
+class Movies(WatchableMedia):
     def __init__(self):
         super().__init__()
         self.video_type = None

@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class Search(APIHelper):
 
     def __init__(self):
-        self.search_api = "https://api.xrel.to/v2/search/"
+        super().__init__()
+        self.search_api = f"{self.base_api}search/"
 
     def get_releases(self, keyword, scene=True, p2p=False, limit=25,
                      response_format="json"):

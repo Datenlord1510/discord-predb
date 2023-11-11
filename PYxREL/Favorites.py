@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class Favorites(APIHelper):
 
     def __init__(self):
-        self.favorites_api = "https://api.xrel.to/v2/favs/"
+        super().__init__()
+        self.favorites_api = f"{self.base_api}favs/"
 
     def get_lists(self, response_format="json"):
         # TODO: Needs OAUTH

@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class Release(APIHelper):
 
     def __init__(self):
-        self.release_api = "https://api.xrel.to/v2/release/"
+        super().__init__()
+        self.release_api = f"{self.base_api}release/"
 
     def get_info(self, release_id=None, dirname=None, response_format="json"):
         if not release_id and not dirname:

@@ -1,18 +1,20 @@
 import os
 
 
-config_content = """[categories]
-# Values must match xREL categories.
-relevant_categories = WINDOWS, NSW
-
-[webhooks]
+config_content = """[webhooks]
 WINDOWS =
 NSW =
+MOVIES =
+TV =
+ANIME =
 
 [colors]
-# Windows color defaults to blue and NSW to red. Please use decimal color codes.
+# Please use decimal color codes.
 WINDOWS = 3447003
 NSW = 15548997
+MOVIES = 5763719
+TV = 16705372
+ANIME = 15105570
 
 [timeformat]
 # Timeformat can be "EU" or "US".
@@ -25,9 +27,13 @@ timeformat = EU
 interval = 1200
 
 [modes]
-# Set description to "True" in order to add a section with a game description in German.
+# Set to "True" in order to add a section with a description in German.
 # Use "False" to turn the description off.
-description = False
+WINDOWS = False
+NSW = False
+MOVIES = False
+TV = False
+ANIME = False
 """
 
 current_dir = os.path.dirname(os.path.abspath(__file__))

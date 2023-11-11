@@ -2,10 +2,13 @@ import sys
 import os
 import time
 from PYxREL import xREL
-from webhooks import Webhook, WebhookEmbed
+from discord_webhooks import Webhook
 from config import Config
-from utils import write_games_file, read_games_file, timestamp_to_string
+from utils import write_cache_file, read_cache_file, timestamp_to_string
 from logger import setup_logger
+from game import Game
+from movies import Movies
+from show import Show
 
 logger = setup_logger(__name__)
 
@@ -13,111 +16,74 @@ logger = setup_logger(__name__)
 if __name__ == "__main__":
 
     if not os.path.exists("config.ini"):
-        sys.exit("Could not find config.ini")
+        sys.exit("Could not find config.ini. You can run the "
+                 "create_default_config.py and configure it.")
 
     config = Config()
-    integrity = config.integrity_check()
+    config.integrity_check()
 
     interval = config.get_interval()
     timeformat = config.get_time_format()
-    description_mode = config.get_description_mode()
+    description_modes = config.get_description_modes()
 
-    windows_url = config.get_webhook_for_category("WINDOWS")
-    nsw_url = config.get_webhook_for_category("NSW")
+    webhooks = {}
+    for category, url in config.get_webhooks():
+        webhooks[category] = Webhook(url)
 
-    if windows_url:
-        windows_hook = Webhook(windows_url)
-        windows_hook_color = config.get_color_for_category("WINDOWS")
-    if nsw_url:
-        nsw_hook = Webhook(nsw_url)
-        nsw_hook_color = config.get_color_for_category("NSW")
-
-    relevant_categories = config.get_relevant_categories()
-
-    indie_game_names = ["Indie-Spiele", "Wimmelbild-Spiele", "Solitär-Spiele",
-                        "Puzzlespiele"]
     xrel = xREL()
     logger.info("Started Discord PreDB.")
 
     while True:
-        for cat in relevant_categories:
+        for category in webhooks:
             response = None
             while not response:
-                response = xrel.Release.browse_category(cat)
+                response = xrel.Release.browse_category(category)
                 if not response:
                     logger.warning("Did not receive a response from xREL.")
                     time.sleep(interval)
 
             response = response.get("list")
-            cat_list = read_games_file(cat)
-            if not cat_list:
-                write_games_file(cat, response)
-                logger.info(f"No game lists found for {cat}. "
-                            "Assuming initial scan.")
+            cache = read_cache_file(category)
+            if not cache:
+                write_cache_file(category, response)
+                logger.info(f"Nothing previously cached found for {category}. "
+                            "Assuming initial scan. No message will be send.")
 
-            elif response != cat_list:
-                write_games_file(cat, response)
-                rls_id_list = [rls.get("id") for rls in cat_list]
-                new_releases = [game for game in response if game.get("id")
+            elif response != cache:
+                write_cache_file(category, response)
+                rls_id_list = [rls.get("id") for rls in cache]
+                new_releases = [rls for rls in response if rls.get("id")
                                 not in rls_id_list]
+
                 for rls in new_releases:
-                    indie_flag = False
-                    embed = WebhookEmbed()
-                    rls_title = rls["dirname"]
-                    embed.set_title(rls_title)
-                    rls_time = timestamp_to_string(rls["time"], timeformat)
-                    embed.set_footer(f"Released on {rls_time}")
-                    game_title = rls["ext_info"]["title"]
+                    if category == "windows" or category == "nsw":
+                        instance = Game.from_json(rls)
+                    elif category == "movies":
+                        instance = Movies.from_json(rls)
+                    elif category == "tv" or category == "anime":
+                        instance = Show.from_json(rls)
+                    else:
+                        logger.info(f"Found unknown category: {category}")
+                        continue
 
-                    if game_title in indie_game_names:
-                        indie_flag = True
-                        if "-" in rls_title:
-                            split_index = rls_title.find("-")
-                            game_title = rls_title[:split_index].replace(
-                                ".", " ").replace("_", " ")
-
-                    embed.add_field("Game title", game_title)
-                    embed.add_field("Group", rls["group_name"])
-                    embed.add_field("xREL", rls["link_href"])
+                    formatted_time = timestamp_to_string(instance.time_unix,
+                                                         time_format=timeformat)
+                    embed_msg = instance.to_embed()
+                    embed_msg.set_color(config.get_color_for_category(category))
+                    embed_msg.set_footer(formatted_time)
 
                     try:
-                        size = rls["size"]["number"]
-                        unit = rls["size"]["unit"]
-                        size_string = f"{size} {unit}"
-                        embed.add_field("Size", f"{size_string}")
+                        ext_response = xrel.ExtInfo.get_info(instance.ext_info_id)
+                        embed_msg.set_thumbnail(ext_response["cover_url"])
                     except KeyError:
                         pass
 
-                    try:
-                        embed.add_field("Rating", str(rls["ext_info"]
-                                                      ["rating"]) + "/10")
-                    except KeyError:
-                        pass
-
-                    if indie_flag is False:
-                        ext_info_id = rls["ext_info"]["id"]
-                        ext_response = xrel.ExtInfo.get_info(ext_info_id)
-
+                    if description_modes[category] is True:
                         try:
-                            embed.set_thumbnail(ext_response["cover_url"])
+                            plot = ext_response["externals"][0]["plot"]
+                            embed_msg.add_field("Description", plot)
                         except KeyError:
                             pass
 
-                        if description_mode is True:
-                            try:
-                                plot = ext_response["externals"][0]["plot"]
-                                embed.add_field("Description", plot)
-                            except KeyError:
-                                pass
-
-                    if windows_url and cat == "WINDOWS":
-                        embed.set_color(windows_hook_color)
-                        windows_hook.send_embed(embed)
-                        logger.info("Sent message for new release: "
-                                    f"{rls_title}")
-                    elif nsw_url and cat == "NSW":
-                        embed.set_color(nsw_hook_color)
-                        nsw_hook.send_embed(embed)
-                        logger.info("Sent message for new release: "
-                                    f"{rls_title}")
+                    webhooks[category].send_embed(embed_msg)
         time.sleep(interval)

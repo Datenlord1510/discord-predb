@@ -1,3 +1,6 @@
+from datetime import datetime as dt
+from discord_webhooks import WebhookEmbed
+
 
 class xRELMedia:
     def __init__(self):
@@ -36,3 +39,22 @@ class xRELMedia:
             instance.num_ratings = ext_info.get("num_ratings")
 
         return instance
+
+    def to_embed(self, timeformat="EU"):
+        embed = WebhookEmbed()
+        embed.set_title(self.dirname)
+
+        embed.add_field("Title", self.ext_info_title)
+        embed.add_field("Group", self.group_name)
+        embed.add_field("xREL", self.rls_link_href)
+
+        if self.size_number is not None:
+            size = self.size_number
+            unit = self.size_unit
+            size_string = f"{size} {unit}"
+            embed.add_field("Size", f"{size_string}")
+
+        if self.rating is not None:
+            embed.add_field("Rating", f"{self.rating}/10")
+
+        return embed

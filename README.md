@@ -3,14 +3,22 @@
 </p>
 
 # discord-predb
-discord-predb is a Python tool built for Discord servers, announcing new releases for Windows and Nintendo Switch. Its lightweight design optimizes storage usage by retaining only the latest information and has the minimum requirements by using Discord's webhook integration. The code is modifiable and leverages the xREL API to fetch release details.
+discord-predb is a Python tool built for Discord servers, announcing new releases for several release types. Its lightweight design optimizes storage usage by retaining only the latest information and has the minimum requirements by using Discord's webhook integration. The code is modifiable and leverages the xREL API to fetch release details.
+
+## Update!
+discord-predb now supports more release types!
+- Windows
+- Nintendo Switch
+- Movies (*new*)
+- TV shows (*new*)
+- Anime (*new*)
 
 ## Features
 - Customize the color for your embedded messages!
 - Toggle between EU and US time formats!
 - Adjust the interval for new release checks!
 - No fancy dependencies, only one external module!
-- Stay up-to-date with the newest games!
+- Stay up-to-date with the newest releases!
 
 ## Usage
 - If needed, install the requests module using pip or pip3
@@ -21,7 +29,6 @@ discord-predb is a Python tool built for Discord servers, announcing new release
 - Run main.py
 
 
-In case you are **not** interested in releases for the Windows or Nintendo Switch platform, simply remove the platform from "relevant_categories" in the config.ini file.
 If you messed up the configuration file, simply run "create_default_config.py" to create a new one!
 
 ## Example

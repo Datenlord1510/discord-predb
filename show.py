@@ -13,3 +13,10 @@ class Show(WatchableMedia):
         instance.tv_season = data.get("tv_season")
         instance.tv_episode = data.get("tv_episode")
         return instance
+
+    def to_embed(self):
+        embed = super().to_embed()
+        if self.tv_season is not None and self.tv_episode is not None:
+            embed.add_field("Season", self.tv_season)
+            embed.add_field("Episode", self.tv_episode)
+        return embed

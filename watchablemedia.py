@@ -18,3 +18,10 @@ class WatchableMedia(xRELMedia):
                 instance.imdb_link = f"https://www.imdb.com/title/{instance.imdb_id}/"
 
         return instance
+
+    def to_embed(self):
+        embed = super().to_embed()
+        if self.imdb_id is not None:
+            embed.add_field("IMDb", self.imdb_link)
+
+        return embed

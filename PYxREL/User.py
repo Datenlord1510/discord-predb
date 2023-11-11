@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class User(APIHelper):
 
     def __init__(self):
-        self.user_api = "https://api.xrel.to/v2/user/"
+        super().__init__()
+        self.user_api = f"{self.base_api}user/"
 
     def get_info(self, response_format="json"):
         # TODO: Needs OAUTH

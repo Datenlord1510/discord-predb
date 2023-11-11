@@ -71,5 +71,12 @@ class WebhookEmbed:
     def add_field(self, name, value, inline=False):
         if "fields" not in self.data:
             self.data["fields"] = []
+
+        for field in self.data["fields"]:
+            if field["name"] == name:
+                field["value"] = value
+                field["inline"] = inline
+                return
+
         field = {"name": name, "value": value, "inline": inline}
         self.data["fields"].append(field)

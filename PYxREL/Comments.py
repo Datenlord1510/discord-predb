@@ -4,7 +4,8 @@ from .APIHelper import APIHelper
 class Comments(APIHelper):
 
     def __init__(self):
-        self.comments_api = "https://api.xrel.to/v2/comments/"
+        super().__init__()
+        self.comments_api = f"{self.base_api}comments/"
 
     def get_comments(self, release_id, release_type="release", per_page=25,
                      page=1, response_format="json"):

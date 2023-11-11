@@ -4,8 +4,9 @@ from .APIHelper import APIHelper
 class ExtInfo(APIHelper):
 
     def __init__(self):
-        self.ext_info_api = "https://api.xrel.to/v2/ext_info/"
-        self.calendar_api = "https://api.xrel.to/v2/calendar/upcoming"
+        super().__init__()
+        self.ext_info_api = f"{self.base_api}ext_info/"
+        self.calendar_api = f"{self.base_api}calendar/upcoming"
 
     def get_upcoming(self, country="de", response_format="json"):
         api = f"{self.calendar_api}.{response_format}"

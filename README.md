@@ -1,9 +1,10 @@
 <p align="center">
+<p align="center">
   <img src="https://i.ibb.co/FxBt6zv/sans-github-2-70.png"/>
 </p>
 
 # discord-predb
-discord-predb is a Python tool built for Discord servers, announcing new releases for several release types. Its lightweight design optimizes storage usage by retaining only the latest information and has the minimum requirements by using Discord's webhook integration. The code is modifiable and leverages the xREL API to fetch release details.
+discord-predb is a Python tool built for Discord servers, announcing new releases for several release types. Its lightweight design optimizes storage usage by retaining only the latest information and has the minimum requirements by using Discord's webhook integration. The code leverages the xREL API to fetch release details.
 
 ## Update!
 discord-predb now supports more release types!
@@ -24,7 +25,7 @@ discord-predb now supports more release types!
 - If needed, install the requests module using pip or pip3
 - Add your Discord webhooks to the config.ini file
 - Edit colors, time format and interval if needed
-- Set the description mode to "True" if you want a short description of the game added to the message (the language will be **German**)
+- Set the description mode to "True" if you want a short description of the release added to the message (the language will be **German**)
 - Run test.py to check if everything is working. You should get a message to your configured webhooks.
 - Run main.py
 

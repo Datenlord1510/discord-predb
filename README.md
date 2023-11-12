@@ -1,6 +1,6 @@
 <p align="center">
 <p align="center">
-  <img src="https://i.ibb.co/cLH004G/523525354235.png"/>
+  <img src="https://i.ibb.co/FxBt6zv/sans-github-2-70.png"/>
 </p>
 
 # discord-predb
@@ -35,7 +35,7 @@ If you messed up the configuration file, simply run "create_default_config.py" t
 ## Example
 This is what a message looks like by default:
 <p align="center">
-  <img src="https://i.ibb.co/w66GgqG/eg.png"/>
+  <img src="https://i.ibb.co/cLH004G/523525354235.png"/>
 </p>
 
 ## Disclaimer

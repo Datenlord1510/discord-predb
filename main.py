@@ -1,7 +1,7 @@
 import sys
 import os
 import time
-from PYxREL import xREL
+from pyxrel import xREL
 from discord_webhooks import Webhook
 from config import Config
 from utils import write_cache_file, read_cache_file, timestamp_to_string
